@@ -1,0 +1,6 @@
+export enum StatusCode {
+  SUCCESS = 200,
+  MOVED_PERMANENTLY = 301,
+  BAD_REQUEST = 400,
+  INTERNAL_SERVER_ERROR = 500
+}
