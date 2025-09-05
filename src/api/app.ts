@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import cors from 'cors';
 import xssClean from 'xss-clean';
+import mainRoutes from './routes'
 
 const app: Express = express();
 
@@ -21,8 +22,6 @@ app.use(cors());
 // Prevent cross site scripting attacks
 app.use(xssClean());
 
-app.get('/', (req, res) => {
-  res.send('Test')
-})
+app.use(mainRoutes)
 
 export default app;
