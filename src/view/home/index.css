@@ -3,6 +3,28 @@
   --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-bg-light: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  
+  --text-dark: #2d3748;
+  --text-muted: #718096;
+  --text-light: rgba(255, 255, 255, 0.9);
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+  
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 20px;
+  
+  --transition-fast: all 0.2s ease;
+  --transition-smooth: all 0.3s ease;
+  --transition-slow: all 0.4s ease;
 }
 
 body {
@@ -25,11 +47,12 @@ body::before {
   pointer-events: none;
 }
 
-.navbar {
-  background: rgba(255, 255, 255, 0.95) !important;
+.glass-nav {
+  background: var(--glass-bg) !important;
   backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-lg);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 1000;
 }
 
 .brand-logo {
@@ -113,6 +136,23 @@ body::before {
   border-color: #667eea;
   box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
   background: white;
+}
+
+.btn-custom {
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  color: #667eea;
+  border-radius: var(--border-radius-md);
+  font-weight: 500;
+  transition: var(--transition-smooth);
+  backdrop-filter: blur(10px);
+}
+
+.btn-custom:hover {
+  background: var(--primary-gradient);
+  border-color: transparent;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-shorten {
@@ -248,6 +288,15 @@ body::before {
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.8);
   padding: 2rem 0;
+}
+
+.stats-badge-nav {
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  color: #667eea;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-lg);
+  font-size: 0.875rem;
 }
 
 .stats-badge {
