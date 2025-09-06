@@ -3,11 +3,17 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import cors from 'cors';
 import xssClean from 'xss-clean';
-import mainRoutes from './routes'
+import path from 'path';
+
+import mainRoutes from './routes';
+import { customHeaders } from './middlewares/customHeaders';
 
 const app: Express = express();
 
+app.use(express.static(path.join(process.cwd(), '..', 'public')));
+
 // body parser into json
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // added security for headers
@@ -22,6 +28,14 @@ app.use(cors());
 // Prevent cross site scripting attacks
 app.use(xssClean());
 
-app.use(mainRoutes)
+// Custom headers
+app.use(customHeaders);
+
+// Set EJS as template engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../view'));
+
+// Set routes
+app.use(mainRoutes);
 
 export default app;
