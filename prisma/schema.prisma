@@ -1,0 +1,17 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ShortUrl {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code          String     @db.Char(8) @unique
+  originalUrl   String     @db.VarChar(255)
+  clicks        Int        @default(0)
+  createdAt     DateTime   @default(now()) @db.Timestamp(6)
+  updatedAt     DateTime   @updatedAt
+}
