@@ -10,7 +10,11 @@ export const shortUrl = asyncHandler(async (
 ) => {
   const shortUrlId = req.baseUrl.replace('/', '');
 
-  const redirectURL = mockURLRedirects[shortUrlId]
+  const redirectURL = mockURLRedirects[shortUrlId];
 
-  res.status(StatusCode.MOVED_PERMANENTLY).redirect(redirectURL);
+  if (!redirectURL) {
+    return res.status(StatusCode.BAD_REQUEST).send('URL not found');
+  }
+
+  return res.status(StatusCode.MOVED_PERMANENTLY).redirect(redirectURL);
 });
