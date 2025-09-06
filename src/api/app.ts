@@ -10,8 +10,6 @@ import { customHeaders } from './middlewares/customHeaders';
 
 const app: Express = express();
 
-app.use(express.static(path.join(process.cwd(), '..', 'public')));
-
 // body parser into json
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

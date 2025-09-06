@@ -9,7 +9,7 @@ export const getHome = asyncHandler(async (
   res: Response,
   _next: NextFunction
 ) => {
-  res.status(StatusCode.SUCCESS).render('home');
+  return res.status(StatusCode.SUCCESS).render('home');
 });
 
 export const getHomeStyles = asyncHandler(async (
@@ -17,8 +17,19 @@ export const getHomeStyles = asyncHandler(async (
   res: Response,
   _next: NextFunction
 ) => {
-  res
+  return res
     .status(StatusCode.SUCCESS)
     .type('text/css')
-    .sendFile(path.join(__dirname, '../../../public/css/home/index.css'));
+    .sendFile(path.join(__dirname, '../../../view/home/index.css'));
+});
+
+export const getHomeJs = asyncHandler(async (
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  return res
+    .status(StatusCode.SUCCESS)
+    .type('application/javascript')
+    .sendFile(path.join(__dirname, '../../../view/home/index.js'));
 });
