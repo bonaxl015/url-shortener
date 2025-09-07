@@ -11,5 +11,8 @@ export enum URL {
   SHORT_URL_GET_ALL = '/get-all',
   SHORT_URL_CREATE = '/create',
   SHORT_URL_UPDATE = '/update',
-  SHORT_URL_DELETE = '/delete'
+  SHORT_URL_DELETE = '/delete',
+  NOT_FOUND = '*',
+  NOT_FOUND_CSS = '/not-found/css/index.css',
+  NOT_FOUND_JS = '/not-found/js/index.js',
 }
