@@ -1,8 +1,17 @@
 import { Router } from 'express';
-import { shortUrl } from '../../controllers/shortUrl'
+import {
+  shortUrlGetAll,
+  shortUrlCreate,
+  shortUrlUpdate,
+  shortUrlDelete
+} from '../../controllers/shortUrl'
+import { URL } from '../../enums/routes';
 
 const shortUrlRoutes: Router = Router();
 
-shortUrlRoutes.get('', shortUrl);
+shortUrlRoutes.get(URL.SHORT_URL_GET_ALL, shortUrlGetAll);
+shortUrlRoutes.post(URL.SHORT_URL_CREATE, shortUrlCreate);
+shortUrlRoutes.patch(URL.SHORT_URL_UPDATE, shortUrlUpdate);
+shortUrlRoutes.delete(URL.SHORT_URL_DELETE, shortUrlDelete);
 
 export default shortUrlRoutes;
