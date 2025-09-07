@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { getHome, getHomeStyles, getHomeJs } from '../../controllers/home'
+import { URL } from '../../enums/routes';
 
 const homeRoutes: Router = Router();
 
-homeRoutes.get('', getHome);
-homeRoutes.get('/home/css/index.css', getHomeStyles);
-homeRoutes.get('/home/js/index.js', getHomeJs);
+homeRoutes.get(URL.EMPTY, getHome);
+homeRoutes.get(URL.HOME_CSS, getHomeStyles);
+homeRoutes.get(URL.HOME_JS, getHomeJs);
 
 export default homeRoutes;

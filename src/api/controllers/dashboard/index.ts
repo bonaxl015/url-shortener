@@ -28,6 +28,11 @@ const mockUrls = [
   }
 ];
 
+/**
+ * @method GET
+ * @returns dashboard page html
+ * @description request for getting html for dashboard page
+ */
 export const getDashboard = asyncHandler(async (
   _req: Request,
   res: Response,
@@ -36,6 +41,11 @@ export const getDashboard = asyncHandler(async (
   return res.status(StatusCode.SUCCESS).render('dashboard', { urls: mockUrls });
 });
 
+/**
+ * @method GET
+ * @returns dashboard page css
+ * @description request for getting css for dashboard page
+ */
 export const getDashboardStyles = asyncHandler(async (
   _req: Request,
   res: Response,
@@ -47,6 +57,11 @@ export const getDashboardStyles = asyncHandler(async (
     .sendFile(path.join(__dirname, '../../../view/dashboard/index.css'));
 });
 
+/**
+ * @method GET
+ * @returns dashboard page js
+ * @description request for getting js for dashboard page
+ */
 export const getDashboardJs = asyncHandler(async (
   _req: Request,
   res: Response,
