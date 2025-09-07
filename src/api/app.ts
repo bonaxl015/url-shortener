@@ -7,6 +7,7 @@ import path from 'path';
 
 import mainRoutes from './routes';
 import { customHeaders } from './middlewares/customHeaders';
+import errorHandler from './middlewares/errorHandler';
 
 const app: Express = express();
 
@@ -35,5 +36,8 @@ app.set('views', path.join(__dirname, '../view'));
 
 // Set routes
 app.use(mainRoutes);
+
+// Handle errors
+app.use(errorHandler)
 
 export default app;
