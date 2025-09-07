@@ -138,6 +138,33 @@ body::before {
   background: white;
 }
 
+.shorten-url-result-container {
+  display: none;
+}
+
+.shorten-url-error-container {
+  display: none;
+}
+
+.shorten-url-result {
+  font-size: 1.3rem;
+  color: #667eea;
+  text-decoration: none;
+}
+
+.result-text {
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.error-message {
+  font-size: 1.3rem;
+  color: #f5576c;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
 .btn-custom {
   border: 2px solid rgba(102, 126, 234, 0.3);
   color: #667eea;
