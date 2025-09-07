@@ -33,3 +33,39 @@ document.addEventListener('DOMContentLoaded', function() {
 		observer.observe(card);
   });
 });
+
+document.getElementById('shorten-url-form').addEventListener('submit', async function(e) {
+	e.preventDefault();
+
+	const urlInput = document.getElementById('shorten-url-input').value;
+	const resultContainer = document.getElementById('shorten-url-result-container');
+	const resultDisplayElement = document.getElementById('shorten-url-result');
+	const errorContainer = document.getElementById('shorten-url-error-container');
+	const errorDisplayElement = document.getElementById('shorten-url-error-message');
+
+	resultContainer.style.display = 'none'
+	errorContainer.style.display = 'none'
+
+	try {
+		const response = await fetch('/api/v1/short-url/create', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ url: urlInput })
+		});
+
+		const data = await response.json();
+
+		if (!response.ok) {
+			throw new Error(data.error || 'Something went wrong');
+		}
+
+		resultDisplayElement.href = data.shortUrl;
+		resultDisplayElement.innerText = data.shortUrl;
+		resultContainer.style.display = 'block';
+	} catch (error) {
+		errorDisplayElement.innerText = error.message;
+		errorContainer.style.display = 'block';
+	}
+});
