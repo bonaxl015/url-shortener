@@ -4,11 +4,12 @@ import {
   getDashboardStyles,
   getDashboardJs
 } from '../../controllers/dashboard'
+import { URL } from '../../enums/routes';
 
 const dashboardRoutes: Router = Router();
 
-dashboardRoutes.get('', getDashboard);
-dashboardRoutes.get('/css/index.css', getDashboardStyles);
-dashboardRoutes.get('/js/index.js', getDashboardJs);
+dashboardRoutes.get(URL.EMPTY, getDashboard);
+dashboardRoutes.get(URL.DASHBOARD_CSS, getDashboardStyles);
+dashboardRoutes.get(URL.DASHBOARD_JS, getDashboardJs);
 
 export default dashboardRoutes;

@@ -1,5 +1,15 @@
 export enum URL {
+  EMPTY = '',
   HOME = '/',
-  SHORT_URL = '/:shortUrlId',
-  DASHBOARD = '/main/dashboard'
+  HOME_CSS = '/home/css/index.css',
+  HOME_JS = '/home/js/index.js',
+  DASHBOARD = '/main/dashboard',
+  DASHBOARD_CSS = '/css/index.css',
+  DASHBOARD_JS = '/css/index.js',
+  REDIRECT_CODE = '/:code',
+  SHORT_URL = '/api/v1/short-url',
+  SHORT_URL_GET_ALL = '/get-all',
+  SHORT_URL_CREATE = '/create',
+  SHORT_URL_UPDATE = '/update',
+  SHORT_URL_DELETE = '/delete'
 }
