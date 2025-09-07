@@ -23,8 +23,7 @@ export const redirectUrl = asyncHandler(async (
     });
 
     if (!searchResult) {
-      // TODO; redirect to 404 page
-      return res.status(StatusCode.BAD_REQUEST).send('URL not found');
+      return res.status(StatusCode.SUCCESS).render('not-found');
     }
 
     await prismaClientInstance.shortUrl.update({
