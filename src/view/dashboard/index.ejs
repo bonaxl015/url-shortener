@@ -20,7 +20,7 @@
 			<div class="d-flex align-items-center">
 				<div class="stats-badge-nav me-3 d-none d-md-block">
 					<i class="fas fa-chart-line me-1"></i> 
-					<span class="fw-bold"><%= urls.length %></span> Links
+					<span id="stat-badge-count" class="fw-bold">-</span> Links
 				</div>
 				<a href="/" class="btn btn-outline-light btn-custom">
 					<i class="fas fa-home me-2"></i>
@@ -54,30 +54,10 @@
 								<i class="fas fa-link"></i>
 							</div>
 							<div class="stat-content">
-								<div class="stat-number"><%= urls.length %></div>
+								<div id="stat-number" class="stat-number">-</div>
 								<div class="stat-label">Total Links</div>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Quick Actions -->
-	<section class="quick-actions">
-		<div class="container">
-			<div class="row g-3">
-				<div class="col-md-6">
-					<div class="action-card">
-						<i class="fas fa-plus-circle action-icon"></i>
-						<span>Create New</span>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="action-card">
-						<i class="fas fa-download action-icon"></i>
-						<span>Export Data</span>
 					</div>
 				</div>
 			</div>
@@ -101,7 +81,6 @@
 
 				<!-- Table Content -->
 				<div class="table-content">
-					<% if (urls && urls.length > 0) { %>
 					<div class="table-responsive">
 						<table class="table table-hover custom-table">
 							<thead>
@@ -126,6 +105,12 @@
 									</th>
 									<th class="table-header-cell">
 										<div class="header-content">
+											<i class="fas fa-computer-mouse me-2 header-icon"></i>
+											<span class="header-text">Clicks</span>
+										</div>
+									</th>
+									<th class="table-header-cell">
+										<div class="header-content">
 											<i class="fas fa-calendar-plus me-2 header-icon"></i>
 											<span class="header-text">Created</span>
 										</div>
@@ -144,89 +129,9 @@
 									</th>
 								</tr>
 							</thead>
-							<tbody>
-								<% urls.forEach((url, index) => { %>
-								<tr class="table-row" id="row-<%= url.id %>">
-									<td class="table-cell">
-										<div class="index-badge">
-											<span><%= index + 1 %></span>
-										</div>
-									</td>
-									<td class="table-cell">
-										<div class="url-info">
-											<div class="url-details">
-												<div class="short-url">
-													<code><%= url.shortUrl %></code>
-												</div>
-												<button onclick="copyToClipboard('/<%= url.shortUrl %>')" 
-														class="copy-btn">
-													<i class="fas fa-copy me-1"></i>
-													Copy
-												</button>
-											</div>
-										</div>
-									</td>
-									<td class="table-cell">
-										<div class="original-url">
-											<a href="<%= url.originalUrl %>" target="_blank" 
-											   class="url-link" 
-											   title="<%= url.originalUrl %>">
-												<span class="url-text"><%= url.originalUrl %></span>
-											</a>
-										</div>
-									</td>
-									<td class="table-cell">
-										<div class="date-info">
-											<div class="date-details">
-												<div class="date-primary"><%= url.dateCreated.toLocaleDateString() %></div>
-												<div class="date-secondary"><%= url.dateCreated.toLocaleTimeString() %></div>
-											</div>
-										</div>
-									</td>
-									<td class="table-cell">
-										<div class="date-info">
-											<div class="date-details">
-												<div class="date-primary"><%= url.dateUpdated.toLocaleDateString() %></div>
-												<div class="date-secondary"><%= url.dateUpdated.toLocaleTimeString() %></div>
-											</div>
-										</div>
-									</td>
-									<td class="table-cell">
-										<div class="action-buttons">
-											<button onclick="editUrl(<%= url.id %>, '<%= url.originalUrl %>')" 
-													class="btn btn-sm btn-action btn-edit">
-												<i class="fas fa-edit"></i>
-												<span>Edit</span>
-											</button>
-											<button onclick="deleteUrl(<%= url.id %>)" 
-													class="btn btn-sm btn-action btn-delete">
-												<i class="fas fa-trash"></i>
-												<span>Delete</span>
-											</button>
-										</div>
-									</td>
-								</tr>
-								<% }); %>
-							</tbody>
+							<tbody id="table-body-data"></tbody>
 						</table>
 					</div>
-					<% } else { %>
-					<!-- Empty State -->
-					<div class="empty-state">
-						<div class="empty-icon">
-							<i class="fas fa-link"></i>
-						</div>
-						<h3 class="empty-title">No URLs Yet</h3>
-						<p class="empty-description">
-							Get started by creating your first shortened URL.<br>
-							It only takes a few seconds!
-						</p>
-						<a href="/" class="btn btn-primary btn-lg empty-cta">
-							<i class="fas fa-plus me-2"></i>
-							Create First URL
-						</a>
-					</div>
-					<% } %>
 				</div>
 			</div>
 		</div>
@@ -243,7 +148,7 @@
 					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
-				<form id="editForm" method="POST">
+				<form id="editForm">
 					<div class="modal-body">
 						<div class="mb-3">
 							<label class="form-label fw-semibold">

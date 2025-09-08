@@ -18,6 +18,7 @@ const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`
  * @param pageNumber current number of page to fetch
  * @returns list of original URL and its shortened URL
  * @description paging query of data based on pageNumber and pageSize values
+ * @throws error when pageSize and pageNumber values are non-numerical
  */
 export const shortUrlGetAll = asyncHandler(async (
   req: Request,
@@ -58,6 +59,7 @@ export const shortUrlGetAll = asyncHandler(async (
  * @param url valid URL to be shortened
  * @returns shortUrl, originalUrl
  * @description create new entry for shortened URL
+ * @throws error when url is not provided
  */
 export const shortUrlCreate = asyncHandler(async (
   req: Request,
@@ -101,6 +103,7 @@ export const shortUrlCreate = asyncHandler(async (
  * @param url valid URL to be shortened
  * @returns shortUrl, originalUrl
  * @description update existing entry for shortened URL
+ * @throws error when id and url is not provided
  */
 export const shortUrlUpdate = asyncHandler(async (
   req: Request,
@@ -149,10 +152,11 @@ export const shortUrlUpdate = asyncHandler(async (
 });
 
 /**
- * @method PATCH
+ * @method DELETE
  * @param id unique id of the entry to delete
- * @returns null
+ * @returns deleteSuccess = true if deletion is successful
  * @description delete existing entry for shortened URL
+ * @throws error when id is empty
  */
 export const shortUrlDelete = asyncHandler(async (
   req: Request,
@@ -182,7 +186,32 @@ export const shortUrlDelete = asyncHandler(async (
       throw new Error('Data delete failed');
     }
 
-    res.status(StatusCode.SUCCESS).json(null);
+    res.status(StatusCode.SUCCESS).json({ deleteSuccess: true });
+  } catch (error) {
+    return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({
+      error: error instanceof Error ? error.message : 'Something went wrong'
+    });
+  }
+});
+
+/**
+ * @method GET
+ * @returns total number of URL shoretened list
+ * @description get the total number of records for shortened URLs
+ */
+export const shortUrlTotalCount = asyncHandler(async (
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  try {
+    const totalCount = await prismaClientInstance.shortUrl.count();
+
+    if (!totalCount && totalCount !== 0) {
+      throw new Error('Unable to get total count');
+    }
+
+    res.status(StatusCode.SUCCESS).json({ total: totalCount });
   } catch (error) {
     return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({
       error: error instanceof Error ? error.message : 'Something went wrong'
