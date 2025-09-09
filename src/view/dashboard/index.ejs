@@ -92,7 +92,7 @@
 										</div>
 									</th>
 									<th class="table-header-cell">
-										<div class="header-content">
+										<div class="header-content" style="width: 120px;">
 											<i class="fas fa-compress-alt me-2 header-icon"></i>
 											<span class="header-text">Short URL</span>
 										</div>
@@ -131,6 +131,49 @@
 							</thead>
 							<tbody id="table-body-data"></tbody>
 						</table>
+					</div>
+				</div>
+
+				<!-- Pagination Section  -->
+				<div class="pagination-container">
+					<nav aria-label="Table pagination" class="pagination-nav">
+						<ul class="pagination pagination-custom mb-0" id="paginationList">								
+							<!-- Previous Page Button -->
+							<li class="page-item" id="prevPageItem">
+								<button class="page-link page-control" id="prevPage" title="Previous page">
+									<i class="fas fa-angle-left"></i>
+								</button>
+							</li>
+								
+							<!-- Page Numbers Container -->
+							<div class="page-numbers" id="pageNumbers">
+								<!-- Dynamic page numbers will be inserted here -->
+							</div>
+								
+							<!-- Next Page Button -->
+							<li class="page-item" id="nextPageItem">
+								<button class="page-link page-control" id="nextPage" title="Next page">
+									<i class="fas fa-angle-right"></i>
+								</button>
+							</li>
+						</ul>
+					</nav>
+
+					<!-- Mobile Pagination (Simplified for small screens) -->
+					<div class="mobile-pagination d-md-none">
+						<button class="btn btn-outline-primary btn-sm" id="mobilePrev" disabled>
+							<i class="fas fa-chevron-left me-1"></i>
+							Previous
+						</button>
+							
+						<span class="mobile-page-info mx-3">
+							Page <span id="currentPageMobile">1</span> of <span id="totalPagesMobile">1</span>
+						</span>
+							
+						<button class="btn btn-outline-primary btn-sm" id="mobileNext">
+							Next
+							<i class="fas fa-chevron-right ms-1"></i>
+						</button>
 					</div>
 				</div>
 			</div>
