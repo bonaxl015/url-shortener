@@ -11,6 +11,15 @@ const HTTP_METHODS = {
   DELETE: 'DELETE'
 }
 
+// Pagination Configuration
+const paginationConfig = {
+  currentPage: 1,
+  itemsPerPage: 10,
+  totalItems: 0,
+  totalPages: 0,
+  maxVisiblePages: 5
+};
+
 // Fetch data from server
 async function fetchDBRequest(url, method, body = null) {
   const response = await fetch(url, {
@@ -113,29 +122,41 @@ function createTableRows(rowData, isUpdate) {
 
 }
 
-// Initialize data
-async function initialize(isUpdate = false) {
-  const statBadgeContainer = document.getElementById('stat-badge-count');
-  const statNumberContainer = document.getElementById('stat-number');
-
-  const queryParams = {
-    pageNumber: 1,
-    pageSize: 10
-  }
+// Get table list data
+async function getTableData(pageNumber = paginationConfig.currentPage, pageSize = paginationConfig.itemsPerPage) {
+  const queryParams = { pageNumber, pageSize };
   const queryString = new URLSearchParams(queryParams);
 
-  // Get table list
-  const getListData = await fetchDBRequest(
+  const getTableDataList = await fetchDBRequest(
     `${GET_LIST_DATA_API}?${queryString}`,
     HTTP_METHODS.GET
   );
 
-  // Get total count
-  const countData = await fetchDBRequest(TOTAL_COUNT_API, HTTP_METHODS.GET);
+  return getTableDataList;
+}
 
-  // Display total count
-  statBadgeContainer.innerText = countData.total;
-  statNumberContainer.innerText = countData.total;
+// Initialize table data
+async function initializeTable({ isUpdate, isPageUpdate }) {
+  const statBadgeContainer = document.getElementById('stat-badge-count');
+  const statNumberContainer = document.getElementById('stat-number');
+
+  // Get table list
+  const getListData = await getTableData(
+    isUpdate ? paginationConfig.currentPage : 1,
+    paginationConfig.itemsPerPage
+  );
+
+  if (!isPageUpdate) {
+    // Get total count
+    const countData = await fetchDBRequest(TOTAL_COUNT_API, HTTP_METHODS.GET);
+  
+    // Display total count
+    statBadgeContainer.innerText = countData.total;
+    statNumberContainer.innerText = countData.total;
+  
+    // Set total page count in config
+    paginationConfig.totalItems = countData.total;
+  }
 
   // Display table data
   createTableRows(getListData, isUpdate);
@@ -168,7 +189,7 @@ function editFormEventSetup(id, editModal) {
       );
 
       if (updateData) {
-        initialize(true);
+        initializeTable({ isUpdate: true, isPageUpdate: true });
         editModal.hide();
       }
     } catch (error) {
@@ -205,7 +226,7 @@ async function deleteUrl(id) {
       );
 
       if (deleteData) {
-        initialize(true);
+        initializeTable({ isUpdate: true, isPageUpdate: false });
       }
     } catch (error) {
       console.log(error);
@@ -239,5 +260,212 @@ function showToast(message, type = 'success') {
 
 // Fetch data upon render
 document.addEventListener('DOMContentLoaded', async function() {
-  await initialize();
+  await initializeTable({ isUpdate: true, isPageUpdate: false });
+  initializePagination();
 });
+
+function initializePagination() {
+  paginationConfig.totalPages = Math.ceil(paginationConfig.totalItems / paginationConfig.itemsPerPage);
+
+  // Set up event listeners
+  setupPaginationEventListeners();
+  
+  // Initial render
+  updatePagination();
+  showCurrentPage();
+}
+
+function setupPaginationEventListeners() {
+  // Navigation buttons
+  document.getElementById('prevPage').addEventListener('click', () => goToPage(paginationConfig.currentPage - 1));
+  document.getElementById('nextPage').addEventListener('click', () => goToPage(paginationConfig.currentPage + 1));
+  
+  // Mobile pagination
+  document.getElementById('mobilePrev').addEventListener('click', () => goToPage(paginationConfig.currentPage - 1));
+  document.getElementById('mobileNext').addEventListener('click', () => goToPage(paginationConfig.currentPage + 1));
+}
+
+function updatePagination() {
+  updatePaginationButtons();
+  updatePageNumbers();
+  updateMobilePagination();
+}
+
+function updatePaginationButtons() {
+  const isFirstPage = paginationConfig.currentPage === 1;
+  const isLastPage = paginationConfig.currentPage === paginationConfig.totalPages;
+  
+  // Navigation buttons
+  document.getElementById('prevPage').disabled = isFirstPage;
+  document.getElementById('nextPage').disabled = isLastPage;
+  
+  // Update button styles
+  updateButtonStates();
+}
+
+function updateButtonStates() {
+  const buttons = ['prevPage', 'nextPage'];
+
+  buttons.forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    const listItem = button.closest('.page-item');
+    
+    if (button.disabled) {
+      listItem.classList.add('disabled');
+      button.setAttribute('aria-disabled', 'true');
+    } else {
+      listItem.classList.remove('disabled');
+      button.removeAttribute('aria-disabled');
+    }
+  });
+}
+
+function updatePageNumbers() {
+  const pageNumbersContainer = document.getElementById('pageNumbers');
+  pageNumbersContainer.innerHTML = '';
+  
+  if (paginationConfig.totalPages <= 1) {
+    return;
+  }
+  
+  const pages = generatePageNumbers();
+  
+  pages.forEach(page => {
+    if (page === '...') {
+      const ellipsis = document.createElement('div');
+      ellipsis.className = 'page-ellipsis';
+      ellipsis.textContent = '...';
+      pageNumbersContainer.appendChild(ellipsis);
+    } else {
+      const pageButton = document.createElement('button');
+      pageButton.className = `page-number ${page === paginationConfig.currentPage ? 'active' : ''}`;
+      pageButton.textContent = page;
+      pageButton.setAttribute('aria-label', `Go to page ${page}`);
+      pageButton.setAttribute('aria-current', page === paginationConfig.currentPage ? 'page' : 'false');
+      
+      pageButton.addEventListener('click', () => goToPage(page));
+      pageNumbersContainer.appendChild(pageButton);
+    }
+  });
+}
+
+function generatePageNumbers() {
+  const pages = [];
+  const { currentPage, totalPages, maxVisiblePages } = paginationConfig;
+  
+  if (totalPages <= maxVisiblePages) {
+    // Show all pages if total pages is less than or equal to max visible
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+  } else {
+    // Complex pagination logic
+    const halfVisible = Math.floor(maxVisiblePages / 2);
+    let startPage = Math.max(1, currentPage - halfVisible);
+    let endPage = Math.min(totalPages, currentPage + halfVisible);
+    
+    // Adjust if we're near the beginning or end
+    if (currentPage <= halfVisible) {
+      endPage = Math.min(totalPages, maxVisiblePages);
+    }
+    if (currentPage >= totalPages - halfVisible) {
+      startPage = Math.max(1, totalPages - maxVisiblePages + 1);
+    }
+      
+    // Add first page and ellipsis if needed
+    if (startPage > 1) {
+      pages.push(1);
+      if (startPage > 2) {
+        pages.push('...');
+      }
+    }
+      
+    // Add visible page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+      
+    // Add ellipsis and last page if needed
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push('...');
+      }
+      pages.push(totalPages);
+    }
+  }
+    
+  return pages;
+}
+
+function updateMobilePagination() {
+  document.getElementById('currentPageMobile').textContent = paginationConfig.currentPage;
+  document.getElementById('totalPagesMobile').textContent = paginationConfig.totalPages;
+  
+  document.getElementById('mobilePrev').disabled = paginationConfig.currentPage === 1;
+  document.getElementById('mobileNext').disabled = paginationConfig.currentPage === paginationConfig.totalPages;
+}
+
+async function goToPage(page) {
+  if (page < 1 || page > paginationConfig.totalPages || page === paginationConfig.currentPage) {
+    return;
+  }
+  
+  paginationConfig.currentPage = page;
+  updatePagination();
+  await showCurrentPage(page);
+  
+  // Add loading effect
+  const paginationContainer = document.querySelector('.pagination-container');
+  paginationContainer.classList.add('pagination-loading');
+  setTimeout(() => {
+    paginationContainer.classList.remove('pagination-loading');
+  }, 300);
+  
+  // Smooth scroll to top of table
+  document.querySelector('.table-container').scrollIntoView({ 
+    behavior: 'smooth', 
+    block: 'start' 
+  });
+}
+
+async function showCurrentPage() {
+  await initializeTable({ isUpdate: true, isPageUpdate: true })
+}
+
+function updateEmptyState() {
+  const emptyState = document.querySelector('.empty-state');
+  const tableContent = document.querySelector('.table-responsive');
+  
+  if (paginationConfig.totalItems === 0) {
+    if (tableContent) tableContent.style.display = 'none';
+    if (emptyState) emptyState.style.display = 'block';
+    document.querySelector('.pagination-container').style.display = 'none';
+  } else {
+    if (tableContent) tableContent.style.display = 'block';
+    if (emptyState) emptyState.style.display = 'none';
+    document.querySelector('.pagination-container').style.display = 'flex';
+  }
+}
+
+// Helper function to refresh pagination (useful when URLs are added/deleted)
+function refreshPagination() {
+  const tableRows = document.querySelectorAll('.table-row');
+  paginationConfig.totalItems = tableRows.length;
+  paginationConfig.totalPages = Math.ceil(paginationConfig.totalItems / paginationConfig.itemsPerPage);
+  
+  // Adjust current page if needed
+  if (paginationConfig.currentPage > paginationConfig.totalPages && paginationConfig.totalPages > 0) {
+    paginationConfig.currentPage = paginationConfig.totalPages;
+  }
+  
+  updatePagination();
+  showCurrentPage();
+}
+
+// Export functions for use in other parts of the application
+window.paginationUtils = {
+  refreshPagination,
+  goToPage,
+  getCurrentPage: () => paginationConfig.currentPage,
+  getTotalPages: () => paginationConfig.totalPages
+};
