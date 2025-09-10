@@ -407,6 +407,34 @@ body::before {
   transform: none !important;
 }
 
+.mobile-page-control {
+  width: 90px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  background: rgba(255, 255, 255, 0.8);
+  color: #667eea;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.mobile-page-control:hover:not(:disabled) {
+  background: var(--primary-gradient);
+  border-color: transparent;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.mobile-page-control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 .page-numbers {
   display: flex;
   align-items: center;
