@@ -1,11 +1,7 @@
 import app from './api/app';
-import dotenv from 'dotenv';
+import { ENV } from './api/config/env';
 
-dotenv.config();
-
-const port: string | number = process.env.PORT || 5050;
-
-app.listen(port, () => {
-  console.log(`[server] Server running at port ${port}`);
-  console.log(`[server] http://localhost:${port}`);
+app.listen(ENV.PORT, () => {
+	console.log(`[server] Server running at port ${ENV.PORT}`);
+	console.log(`[server] Running at: http://localhost:${ENV.PORT}`);
 });

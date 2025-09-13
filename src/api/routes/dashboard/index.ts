@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import {
-  getDashboard,
-  getDashboardStyles,
-  getDashboardJs
-} from '../../controllers/dashboard'
+import { getDashboard, getDashboardStyles, getDashboardJs } from '../../controllers/dashboard';
 import { URL } from '../../enums/routes';
 
 const dashboardRoutes: Router = Router();

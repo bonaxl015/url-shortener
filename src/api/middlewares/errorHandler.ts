@@ -3,16 +3,16 @@ import { ErrorHandlerFunction } from './types';
 import { StatusCode } from '../enums/statusCodes';
 
 const errorHandler: ErrorHandlerFunction = (
-  error: Error,
-  _request: Request,
-  response: Response,
-  _next: NextFunction,
+	error: Error,
+	_request: Request,
+	response: Response,
+	_next: NextFunction
 ) => {
-  const responseData = {
-    error: error.message
-  }
+	const responseData = {
+		error: error.message
+	};
 
-  response.status(StatusCode.BAD_REQUEST).json(responseData);
+	response.status(StatusCode.BAD_REQUEST).json(responseData);
 };
 
 export default errorHandler;

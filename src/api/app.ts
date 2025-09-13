@@ -38,6 +38,6 @@ app.set('views', path.join(__dirname, '../view'));
 app.use(mainRoutes);
 
 // Handle errors
-app.use(errorHandler)
+app.use(errorHandler);
 
 export default app;
