@@ -1,16 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import dotenv from 'dotenv';
 import { nanoid } from 'nanoid';
 import validUrl from 'valid-url';
 
 import asyncHandler from '../../middlewares/asyncHandler';
 import { StatusCode } from '../../enums/statusCodes';
 import prismaClientInstance from '../../database/prisma';
-
-dotenv.config();
-
-const PORT = process.env.PORT || 5000;
-const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
+import { ENV } from '../../config/env';
 
 /**
  * @method GET
@@ -82,7 +77,7 @@ export const shortUrlCreate = asyncHandler(
 			});
 
 			res.status(StatusCode.CREATED).json({
-				shortUrl: `${BASE_URL}/${createdUrl.code}`,
+				shortUrl: `${ENV.BASE_URL}/${createdUrl.code}`,
 				originalUrl: createdUrl.originalUrl
 			});
 		} catch (error) {
@@ -134,7 +129,7 @@ export const shortUrlUpdate = asyncHandler(
 			});
 
 			res.status(StatusCode.SUCCESS).json({
-				shortUrl: `${BASE_URL}/${updatedUrl.code}`,
+				shortUrl: `${ENV.BASE_URL}/${updatedUrl.code}`,
 				originalUrl: updatedUrl.originalUrl
 			});
 		} catch (error) {
