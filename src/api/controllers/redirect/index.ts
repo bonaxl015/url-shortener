@@ -10,31 +10,29 @@ import prismaClientInstance from '../../database/prisma';
  * @returns void
  * @description accepts code and redirect to it specified original URL
  */
-export const redirectUrl = asyncHandler(async (
-  req: Request,
-  res: Response,
-  _next: NextFunction
-) => {
-  const { code } = req.params
+export const redirectUrl = asyncHandler(
+	async (req: Request, res: Response, _next: NextFunction) => {
+		const { code } = req.params;
 
-  try {
-    const searchResult = await prismaClientInstance.shortUrl.findUnique({
-      where: { code }
-    });
+		try {
+			const searchResult = await prismaClientInstance.shortUrl.findUnique({
+				where: { code }
+			});
 
-    if (!searchResult) {
-      return res.status(StatusCode.SUCCESS).render('not-found');
-    }
+			if (!searchResult) {
+				return res.status(StatusCode.SUCCESS).render('not-found');
+			}
 
-    await prismaClientInstance.shortUrl.update({
-      where: { id: searchResult.id },
-      data: { clicks: { increment: 1 }}
-    })
+			await prismaClientInstance.shortUrl.update({
+				where: { id: searchResult.id },
+				data: { clicks: { increment: 1 } }
+			});
 
-    return res.status(StatusCode.MOVED_PERMANENTLY).redirect(searchResult.originalUrl);
-  } catch (error) {
-    return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({
-      error: error instanceof Error ? error.message : 'Something went wrong'
-    });
-  }
-});
+			return res.status(StatusCode.MOVED_PERMANENTLY).redirect(searchResult.originalUrl);
+		} catch (error) {
+			return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({
+				error: error instanceof Error ? error.message : 'Something went wrong'
+			});
+		}
+	}
+);

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { notFoundHtml, notFoundCss, notFoundJs } from '../../controllers/notFound'
+import { notFoundHtml, notFoundCss, notFoundJs } from '../../controllers/notFound';
 import { URL } from '../../enums/routes';
 
 const notFoundUrlRoutes: Router = Router();

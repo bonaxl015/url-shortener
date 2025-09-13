@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { redirectUrl } from '../../controllers/redirect'
+import { redirectUrl } from '../../controllers/redirect';
 import { URL } from '../../enums/routes';
 
 const redirectUrlRoutes: Router = Router();

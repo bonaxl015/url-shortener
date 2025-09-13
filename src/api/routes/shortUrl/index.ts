@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import {
-  shortUrlGetAll,
-  shortUrlCreate,
-  shortUrlUpdate,
-  shortUrlDelete,
-  shortUrlTotalCount
-} from '../../controllers/shortUrl'
+	shortUrlGetAll,
+	shortUrlCreate,
+	shortUrlUpdate,
+	shortUrlDelete,
+	shortUrlTotalCount
+} from '../../controllers/shortUrl';
 import { URL } from '../../enums/routes';
 
 const shortUrlRoutes: Router = Router();
