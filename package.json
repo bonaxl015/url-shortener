@@ -1,11 +1,12 @@
 {
-	"name": "url-shortener",
+	"name": "zippy",
 	"version": "1.0.0",
-	"description": "URL shortener service",
+	"description": "Full stack URL shortener service",
 	"keywords": [
 		"url",
 		"shorterner",
-		"url-shortener"
+		"url-shortener",
+		"zippy"
 	],
 	"author": "bonaxl015",
 	"license": "MIT",
